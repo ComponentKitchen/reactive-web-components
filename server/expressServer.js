@@ -2,11 +2,9 @@
 /* jshint node: true */
 'use strict';
 
-let fs = require('fs');
 let path = require('path');
 let express = require('express');
 let engines = require('consolidate');
-//let dust = require('dustjs-linkedin');
 let compression = require('compression');
 let version = require('./version.js');
 let pages = require('./pages.js');
