@@ -1,0 +1,7 @@
+{>main/}
+{<title}Home{/title}
+{<head}
+{/head}
+{<content}
+  <div id="contentDiv"></div>
+{/content}

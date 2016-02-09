@@ -1,0 +1,17 @@
+.idea
+node_modules
+timestamp.txt
+version.txt
+
+# All timestamped static file directories will start with 2 (until the year 3000)
+public/2*
+public/temp
+
+# Ignore log files
+/logs
+
+# Ignore local nginx cache directory
+/nginx/cache
+
+# Ignore generated /nginx/config/nginx.conf for running Nginx in dev mode
+/nginx/config/nginx.conf
