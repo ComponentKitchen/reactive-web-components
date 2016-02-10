@@ -4,4 +4,5 @@
 {/head}
 {<content}
   <div id="contentDiv"></div>
+  <rwc-comment-box></rwc-comment-box>
 {/content}
