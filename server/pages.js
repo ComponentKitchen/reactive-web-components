@@ -7,8 +7,7 @@ let version = require('./version.js');
 function init(app) {
   // Map simple routes to Dust templates.
   let routes = {
-    '/': 'home.dust',
-    '/about': 'aboutPage.dust'
+    '/': 'index.html'
   };
   for (let routePath in routes) {
     let view = routes[routePath];

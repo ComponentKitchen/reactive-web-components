@@ -1,7 +1,0 @@
-{>main/}
-{<title}Home{/title}
-{<head}
-{/head}
-{<content}
-  <rwc-comment-box></rwc-comment-box>
-{/content}

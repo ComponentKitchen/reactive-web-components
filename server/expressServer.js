@@ -29,10 +29,10 @@ module.exports = {
     app.use(compression());
     app.use(logRequest);
 
-    // Use DustJS as our web view engine.
+    // Use DustJS as our web view engine, tied to HTML files
     var viewsFolder = path.join(__dirname, viewsFolderName);
-    app.set('view engine', 'dust');
-    app.engine('dust', engines.dust);
+    app.set('view engine', 'html');
+    app.engine('html', engines.dust);
     app.set('views', viewsFolder);
 
     // Headers shared by most responses served by Express.
