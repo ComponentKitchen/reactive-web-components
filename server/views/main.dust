@@ -12,11 +12,7 @@
 
 <body>
   <h1>Reactive Web Components</h1>
-  <div>
-    <p>This is app shell header</p>
-  </div>
   {+content}{/content}
-  <div>This is app shell footer</div>
 </body>
 
 </html>

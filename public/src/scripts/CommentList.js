@@ -5,7 +5,7 @@ import {patch} from 'virtual-dom';
 import {create} from 'virtual-dom';
 import ElementBase from 'basic-element-base/src/ElementBase';
 
-class CommentBox extends ElementBase.compose() {
+class CommentList extends ElementBase.compose() {
 
   reducer(state = {}, action = '') {
     return state;
@@ -35,15 +35,13 @@ class CommentBox extends ElementBase.compose() {
 
   render(state = {}) {
     /*
-    <div id="commentBox">
-      <h1>Comments</h1>
-      <rwc-comment-list></rwc-comment-list>
-      <rwc-comment-form></rwc-comment-form>
-    </div>
+     <div id="commentList">
+       Hello, world! I am a CommentList.
+     </div>
     */
-    return h("div#commentBox", [ "\n  ", h("h1", [ "Comments" ]), "\n  ", h("rwc-comment-list"), "\n  ", h("rwc-comment-form"), "\n" ]);
+    return h("div#commentList", [ "\n  Hello, world! I am a CommentList.\n" ]);
   }
 }
 
-document.registerElement('rwc-comment-box', CommentBox);
-export default CommentBox;
+document.registerElement('rwc-comment-list', CommentList);
+export default CommentList;
