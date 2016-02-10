@@ -35,11 +35,12 @@ class CommentList extends ElementBase.compose() {
 
   render(state = {}) {
     /*
-     <div id="commentList">
-       Hello, world! I am a CommentList.
-     </div>
+    <div id="commentList">
+      <rwc-comment author="Pete Hunt">This is one comment</rwc-comment>
+      <rwc-comment author="Jordan Walke">This is *another* comment</rwc-comment>
+    </div>
     */
-    return h("div#commentList", [ "\n  Hello, world! I am a CommentList.\n" ]);
+    return h("div#commentList", [ "\n  ", h("rwc-comment", {"attributes":{"author":"Pete Hunt"}}, [ "This is one comment" ]), "\n  ", h("rwc-comment", {"attributes":{"author":"Jordan Walke"}}, [ "This is *another* comment" ]), "\n" ]);
   }
 }
 
