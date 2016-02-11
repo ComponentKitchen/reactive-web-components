@@ -5,9 +5,19 @@ import {patch} from 'virtual-dom';
 import {create} from 'virtual-dom';
 import ElementBase from 'basic-element-base/src/ElementBase';
 
+const defaultState = {
+};
+
 class CommentBox extends ElementBase.compose() {
 
-  reducer(state = {}, action = '') {
+  reducer(state, action) {
+    if (action == null || action.type == null) {
+      return state;
+    }
+    if (state == null) {
+      state = defaultState;
+    }
+
     return state;
   }
 

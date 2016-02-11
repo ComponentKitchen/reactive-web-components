@@ -11,10 +11,16 @@ const defaultState = {
 
 class Comment extends ElementBase.compose() {
 
-  reducer(state = defaultState, action = {type: 'SET_AUTHOR'}) {
+  reducer(state, action) {
+    if (action == null || action.type == null) {
+      return state;
+    }
+    if (state == null) {
+      state = defaultState;
+    }
     switch (action.type) {
       case 'SET_AUTHOR':
-        return Object.assign(state, action.newState);
+        return Object.assign({}, state, {author: action.author});
 
       default:
         return state;
@@ -49,7 +55,11 @@ class Comment extends ElementBase.compose() {
   // Redux store.
   //
   set author(author) {
-    this.store.dispatch({type: 'SET_AUTHOR', newState: {author: author}});
+    const action = {
+      type: 'SET_AUTHOR',
+      author: author
+    };
+    this.store.dispatch(action);
   }
   get author() {
     return this.store.getState().author;
