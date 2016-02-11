@@ -39,6 +39,7 @@ class CommentForm extends ElementBase.compose() {
      Hello, world! I am a CommentForm.
      </div>
      */
+    // BUGBUG - Use JSX and convert to h calls
     return h('div#commentForm', [ '\n  Hello, world! I am a CommentForm.\n' ]);
   }
 }

@@ -40,6 +40,7 @@ class CommentList extends ElementBase.compose() {
       <rwc-comment author="Jordan Walke">This is *another* comment</rwc-comment>
     </div>
     */
+    // BUGBUG - Use JSX and convert to h calls
     return h("div#commentList", [ "\n  ", h("rwc-comment", {"attributes":{"author":"Pete Hunt"}}, [ "This is one comment" ]), "\n  ", h("rwc-comment", {"attributes":{"author":"Jordan Walke"}}, [ "This is *another* comment" ]), "\n" ]);
   }
 }

@@ -41,6 +41,7 @@ class CommentBox extends ElementBase.compose() {
       <rwc-comment-form></rwc-comment-form>
     </div>
     */
+    // BUGBUG - Use JSX and convert to h calls
     return h("div#commentBox", [ "\n  ", h("h1", [ "Comments" ]), "\n  ", h("rwc-comment-list"), "\n  ", h("rwc-comment-form"), "\n" ]);
   }
 }

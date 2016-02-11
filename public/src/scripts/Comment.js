@@ -44,19 +44,15 @@ class Comment extends ElementBase.compose() {
   }
 
   //
-  // Note: The component remains stateless - no properties. Everything is managed in the Redux store.
-  // So instead of using attribute marshalling to properties, we intercept the attributeChangedCallback
-  // handled in the mixin, and dispatch an action to the store.
+  // This property setter/getter takes advantage of the AttributeMarshalling mixin.
+  // Note that we don't store properties as class state, but rather via the component's
+  // Redux store.
   //
-  attributeChangedCallback(name, oldValue, newValue) {
-    switch(name) {
-      case 'author':
-        this.store.dispatch({type: 'SET_AUTHOR', newState: {author: newValue}});
-        break;
-
-      default:
-        break;
-    }
+  set author(author) {
+    this.store.dispatch({type: 'SET_AUTHOR', newState: {author: author}});
+  }
+  get author() {
+    return this.store.getState().author;
   }
 
   render(state = {}) {
@@ -68,6 +64,7 @@ class Comment extends ElementBase.compose() {
       {content}
     </div>
      */
+    // BUGBUG - Use JSX and convert to h calls
     return h('div#comment', [ '\n  ', h('h2#commentAuthor', [ '\n' + this.store.getState().author + '\n  ' ]), '\n  ' ]);
   }
 }
