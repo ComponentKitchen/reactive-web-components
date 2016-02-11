@@ -1,5 +1,4 @@
 import {createStore} from 'redux';
-import {h} from 'virtual-dom';
 import {diff} from 'virtual-dom';
 import {patch} from 'virtual-dom';
 import {create} from 'virtual-dom';
@@ -66,16 +65,15 @@ class Comment extends ElementBase.compose() {
   }
 
   render(state = {}) {
-    /*
-    <div id="comment">
-      <h2 id="commentAuthor">
-        {this.store.getState().author}
-      </h2>
-      {content}
-    </div>
-     */
-    // BUGBUG - Use JSX and convert to h calls
-    return h('div#comment', [ '\n  ', h('h2#commentAuthor', [ '\n' + this.store.getState().author + '\n  ' ]), '\n  ' ]);
+    /* jshint ignore:start */
+    return (
+      <div id="comment">
+        <h2 id="commentAuthor">
+          {this.store.getState().author}
+        </h2>
+      </div>
+    );
+    /* jshint ignore:end */
   }
 }
 

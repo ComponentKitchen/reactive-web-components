@@ -1,5 +1,4 @@
 import {createStore} from 'redux';
-import {h} from 'virtual-dom';
 import {diff} from 'virtual-dom';
 import {patch} from 'virtual-dom';
 import {create} from 'virtual-dom';
@@ -44,15 +43,15 @@ class CommentBox extends ElementBase.compose() {
   }
 
   render(state = {}) {
-    /*
-    <div id="commentBox">
-      <h1>Comments</h1>
-      <rwc-comment-list></rwc-comment-list>
-      <rwc-comment-form></rwc-comment-form>
-    </div>
-    */
-    // BUGBUG - Use JSX and convert to h calls
-    return h("div#commentBox", [ "\n  ", h("h1", [ "Comments" ]), "\n  ", h("rwc-comment-list"), "\n  ", h("rwc-comment-form"), "\n" ]);
+    /* jshint ignore:start */
+    return (
+      <div id="commentBox">
+        <h1>Comments</h1>
+        <rwc-comment-list></rwc-comment-list>
+        <rwc-comment-form></rwc-comment-form>
+      </div>
+    );
+    /* jshint ignore:end */
   }
 }
 

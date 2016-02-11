@@ -1,5 +1,4 @@
 import {createStore} from 'redux';
-import {h} from 'virtual-dom';
 import {diff} from 'virtual-dom';
 import {patch} from 'virtual-dom';
 import {create} from 'virtual-dom';
@@ -44,14 +43,14 @@ class CommentList extends ElementBase.compose() {
   }
 
   render(state = {}) {
-    /*
-    <div id="commentList">
-      <rwc-comment author="Pete Hunt">This is one comment</rwc-comment>
-      <rwc-comment author="Jordan Walke">This is *another* comment</rwc-comment>
-    </div>
-    */
-    // BUGBUG - Use JSX and convert to h calls
-    return h("div#commentList", [ "\n  ", h("rwc-comment", {"attributes":{"author":"Pete Hunt"}}, [ "This is one comment" ]), "\n  ", h("rwc-comment", {"attributes":{"author":"Jordan Walke"}}, [ "This is *another* comment" ]), "\n" ]);
+    /* jshint ignore:start */
+    return (
+      <div id="commentList">
+        <rwc-comment author="Rob Bearman">Rob's comment</rwc-comment>
+        <rwc-comment author="Jan Miksovsky">Jan's comment</rwc-comment>
+      </div>
+    );
+    /* jshint ignore:end */
   }
 }
 

@@ -1,5 +1,4 @@
 import {createStore} from 'redux';
-import {h} from 'virtual-dom';
 import {diff} from 'virtual-dom';
 import {patch} from 'virtual-dom';
 import {create} from 'virtual-dom';
@@ -44,13 +43,13 @@ class CommentForm extends ElementBase.compose() {
   }
 
   render(state = {}) {
-    /*
-     <div id="CommentForm">
-     Hello, world! I am a CommentForm.
-     </div>
-     */
-    // BUGBUG - Use JSX and convert to h calls
-    return h('div#commentForm', [ '\n  Hello, world! I am a CommentForm.\n' ]);
+    /* jshint ignore:start */
+    return (
+      <div id="CommentForm">
+        Hello, world! I am a CommentForm.
+      </div>
+    );
+    /* jshint ignore:end */
   }
 }
 
