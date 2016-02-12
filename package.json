@@ -8,8 +8,7 @@
   },
   "author": "Rob Bearman <rob@component.kitchen>",
   "dependencies": {
-    "babel-plugin-h-children-fix": "^1.1.0",
-    "babel-plugin-transform-react-jsx": "^6.5.0",
+    "babel-plugin-transform-h-jsx": "^1.0.0",
     "babel-preset-es2015": "^6.3.13",
     "babelify": "^7.0.2",
     "basic-element-base": "^0.7.1",

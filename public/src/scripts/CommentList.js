@@ -2,6 +2,9 @@ import {createStore} from 'redux';
 import {diff} from 'virtual-dom';
 import {patch} from 'virtual-dom';
 import {create} from 'virtual-dom';
+/* jshint ignore:start */
+import {h} from 'virtual-dom';
+/* jshint ignore:end */
 import ElementBase from 'basic-element-base/src/ElementBase';
 
 const defaultState = {
