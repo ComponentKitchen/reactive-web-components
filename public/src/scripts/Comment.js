@@ -35,20 +35,22 @@ class Comment extends ElementBase.compose() {
     }
 
     this.store = createStore(this.reducer);
-    this.state = {};
+    this.state = defaultState;
     this.tree = this.render(this.state);
     this.rootNode = create(this.tree);
     this.newTree = {};
     this.patches = {};
 
-    this.store.subscribe(() => {
-      this.newTree = this.render(this.store.getState());
-      this.patches = diff(this.tree, this.newTree);
-      this.rootNode = patch(this.rootNode, this.patches);
-      this.tree = this.newTree;
-    });
+    this.store.subscribe(this.storeListener.bind(this));
 
     this.appendChild(this.rootNode);
+  }
+
+  storeListener() {
+    this.newTree = this.render(this.store.getState());
+    this.patches = diff(this.tree, this.newTree);
+    this.rootNode = patch(this.rootNode, this.patches);
+    this.tree = this.newTree;
   }
 
   //
@@ -67,12 +69,13 @@ class Comment extends ElementBase.compose() {
     return this.store.getState().author;
   }
 
+  // BUGBUG - Hook up MutationObserver to watch for injection of child text?
   render(state = {}) {
     /* jshint ignore:start */
     return (
       <div id="comment">
         <h2 id="commentAuthor">
-          {this.store.getState().author}
+          {state.author}
         </h2>
       </div>
     );

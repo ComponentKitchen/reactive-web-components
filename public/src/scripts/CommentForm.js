@@ -35,14 +35,16 @@ class CommentForm extends ElementBase.compose() {
     this.newTree = {};
     this.patches = {};
 
-    this.store.subscribe(() => {
-      this.newTree = this.render(this.store.getState());
-      this.patches = diff(this.tree, this.newTree);
-      this.rootNode = patch(this.rootNode, this.patches);
-      this.tree = this.newTree;
-    });
+    this.store.subscribe(this.storeListener.bind(this));
 
     this.appendChild(this.rootNode);
+  }
+
+  storeListener() {
+    this.newTree = this.render(this.store.getState());
+    this.patches = diff(this.tree, this.newTree);
+    this.rootNode = patch(this.rootNode, this.patches);
+    this.tree = this.newTree;
   }
 
   render(state = {}) {
