@@ -8,7 +8,8 @@ import {h} from 'virtual-dom';
 import ElementBase from 'basic-element-base/src/ElementBase';
 
 const defaultState = {
-  author: ''
+  author: '',
+  comment: ''
 };
 
 class Comment extends ElementBase.compose() {
@@ -23,6 +24,9 @@ class Comment extends ElementBase.compose() {
     switch (action.type) {
       case 'SET_AUTHOR':
         return Object.assign({}, state, {author: action.author});
+
+      case 'SET_COMMENT':
+        return Object.assign({}, state, {comment: action.comment});
 
       default:
         return state;
@@ -40,6 +44,43 @@ class Comment extends ElementBase.compose() {
     this.rootNode = create(this.tree);
     this.newTree = {};
     this.patches = {};
+
+    //
+    // At the time the Comment element is created, no children have yet been created.
+    // Since the comment text is written to be a text child of <rwc-comment>, we need
+    // to watch for that child to be added at which time we'll capture it as the comment
+    // state value, then remove the child element from the DOM.
+    //
+    // BUGBUG: Think about how we use entirely virtual dom approaches to address updating
+    // the DOM without having to use parentNode.removeChild. The state of the virtual dom
+    // ideally should cause a full render, eliminating the text child as part of the patch.
+    //
+    this.observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        // Watch for the addition of any children NOT including the div#comment local dom element.
+        // That is, watch for the addition of light dom elements.
+        if (mutation.type == 'childList' && mutation.addedNodes.length > 0 && mutation.addedNodes[0].id !== 'comment') {
+          let node = mutation.addedNodes[0];
+
+          // We fetch the textContent of the (assumed) text element child, update state
+          // with the comment, then remove the text element from the DOM. Our
+          // next render will update the virtual DOM, with the DOM patching to follow.
+
+          // BUGBUG - need action router
+          const action = {
+            type: 'SET_COMMENT',
+            comment: node.textContent
+          };
+
+          // BUGBUG - assumption here is a single TEXT node child
+          node.parentNode.removeChild(node);
+
+          this.store.dispatch(action);
+        }
+      });
+    });
+
+    this.observer.observe(this, {childList: true});
 
     this.store.subscribe(this.storeListener.bind(this));
 
@@ -69,14 +110,15 @@ class Comment extends ElementBase.compose() {
     return this.store.getState().author;
   }
 
-  // BUGBUG - Hook up MutationObserver to watch for injection of child text?
   render(state = {}) {
+    // Render the local dom for the component
     /* jshint ignore:start */
     return (
       <div id="comment">
         <h2 id="commentAuthor">
           {state.author}
         </h2>
+        {state.comment}
       </div>
     );
     /* jshint ignore:end */
