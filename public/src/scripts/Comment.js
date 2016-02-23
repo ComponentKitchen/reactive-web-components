@@ -118,7 +118,7 @@ class Comment extends ElementBase.compose() {
     return this.store.getState().comment;
   }
 
-  render(state = {}) {
+  render(state = defaultState) {
     // Render the local dom for the component
     /* jshint ignore:start */
     return (

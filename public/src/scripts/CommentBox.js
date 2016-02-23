@@ -29,7 +29,7 @@ class CommentBox extends ElementBase.compose() {
     }
 
     this.store = createStore(this.reducer);
-    this.state = {};
+    this.state = defaultState;
     this.tree = this.render(this.state);
     this.rootNode = create(this.tree);
     this.newTree = {};
@@ -47,12 +47,17 @@ class CommentBox extends ElementBase.compose() {
     this.tree = this.newTree;
   }
 
-  render(state = {}) {
+  render(state = defaultState) {
     /* jshint ignore:start */
+    const mockDownloadedData = [
+      {id: 0, author: 'Rob Bearman', text: 'This is Rob\'s comment'},
+      {id: 1, author: 'Jan Miksovsky', text: 'This is Jan\'s comment'}
+    ];
+
     return (
       <div id="commentBox">
         <h1>Comments</h1>
-        <rwc-comment-list></rwc-comment-list>
+        <rwc-comment-list attributes={{"comment-data": JSON.stringify(mockDownloadedData)}}></rwc-comment-list>
         <rwc-comment-form></rwc-comment-form>
       </div>
     );

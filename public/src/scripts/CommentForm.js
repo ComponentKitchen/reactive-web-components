@@ -29,7 +29,7 @@ class CommentForm extends ElementBase.compose() {
     }
 
     this.store = createStore(this.reducer);
-    this.state = {};
+    this.state = defaultState;
     this.tree = this.render(this.state);
     this.rootNode = create(this.tree);
     this.newTree = {};
@@ -47,7 +47,7 @@ class CommentForm extends ElementBase.compose() {
     this.tree = this.newTree;
   }
 
-  render(state = {}) {
+  render(state = defaultState) {
     /* jshint ignore:start */
     return (
       <div id="CommentForm">

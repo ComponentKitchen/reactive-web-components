@@ -8,6 +8,7 @@ import {h} from 'virtual-dom';
 import ElementBase from 'basic-element-base/src/ElementBase';
 
 const defaultState = {
+  commentList: []
 };
 
 class CommentList extends ElementBase.compose() {
@@ -20,7 +21,17 @@ class CommentList extends ElementBase.compose() {
       state = defaultState;
     }
 
-    return state;
+    switch (action.type) {
+      case 'ADD_COMMENTS':
+        let newState = Object.assign({}, state);
+        for (let i = 0; i < action.comments.length; i++) {
+          newState.commentList.push(action.comments[i]);
+        }
+        return newState;
+
+      default:
+        return state;
+    }
   }
 
   createdCallback() {
@@ -29,7 +40,7 @@ class CommentList extends ElementBase.compose() {
     }
 
     this.store = createStore(this.reducer);
-    this.state = {};
+    this.state = defaultState;
     this.tree = this.render(this.state);
     this.rootNode = create(this.tree);
     this.newTree = {};
@@ -47,12 +58,31 @@ class CommentList extends ElementBase.compose() {
     this.tree = this.newTree;
   }
 
-  render(state = {}) {
+  set commentData(json) {
+    let arrayComments = JSON.parse(json);
+    const action = {
+      type: 'ADD_COMMENTS',
+      comments: arrayComments
+    };
+    this.store.dispatch(action);
+  }
+  get commentData() {
+    return this.store.getState().commentList;
+  }
+
+  render(state = defaultState) {
     /* jshint ignore:start */
+    let commentNodes = state.commentList.map((comment) => {
+      return (
+        <rwc-comment attributes={{author: comment.author, key: comment.key}}>
+          {comment.text}
+        </rwc-comment>
+      );
+    });
+
     return (
       <div id="commentList">
-        <rwc-comment author="Rob Bearman">Rob's comment</rwc-comment>
-        <rwc-comment author="Jan Miksovsky">Jan's comment</rwc-comment>
+        {commentNodes}
       </div>
     );
     /* jshint ignore:end */
