@@ -7,19 +7,21 @@ import {h} from 'virtual-dom';
 /* jshint ignore:end */
 import ElementBase from 'basic-element-base/src/ElementBase';
 
-const defaultState = {
-  author: '',
-  comment: ''
-};
-
 class Comment extends ElementBase.compose() {
+
+  static get defaultState() {
+    return {
+      author: '',
+      comment: ''
+    };
+  }
 
   reducer(state, action) {
     if (action == null || action.type == null) {
       return state;
     }
     if (state == null) {
-      state = defaultState;
+      state = Object.assign({}, Comment.defaultState);
     }
     switch (action.type) {
       case 'SET_AUTHOR':
@@ -39,7 +41,7 @@ class Comment extends ElementBase.compose() {
     }
 
     this.store = createStore(this.reducer);
-    this.state = defaultState;
+    this.state = Object.assign({}, Comment.defaultState);
     this.tree = this.render(this.state);
     this.rootNode = create(this.tree);
     this.newTree = {};
@@ -118,7 +120,7 @@ class Comment extends ElementBase.compose() {
     return this.store.getState().comment;
   }
 
-  render(state = defaultState) {
+  render(state = Object.assign({}, Comment.defaultState)) {
     // Render the local dom for the component
     /* jshint ignore:start */
     return (

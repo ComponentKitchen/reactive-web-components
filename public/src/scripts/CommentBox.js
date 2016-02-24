@@ -7,20 +7,38 @@ import {h} from 'virtual-dom';
 /* jshint ignore:end */
 import ElementBase from 'basic-element-base/src/ElementBase';
 
-const defaultState = {
-};
-
 class CommentBox extends ElementBase.compose() {
+
+  static get defaultState() {
+    return {
+      commentList: [],
+      deepCopy() {
+        let copy = Object.assign({}, this);
+        copy.commentList = this.commentList.slice();
+        return copy;
+      }
+    };
+  }
 
   reducer(state, action) {
     if (action == null || action.type == null) {
       return state;
     }
     if (state == null) {
-      state = defaultState;
+      state = CommentBox.defaultState.deepCopy();
     }
 
-    return state;
+    switch (action.type) {
+      case 'ADD_COMMENTS':
+        let newState = state.deepCopy();
+        for (let i = 0; i < action.comments.length; i++) {
+          newState.commentList.push(action.comments[i]);
+        }
+        return newState;
+
+      default:
+        return state;
+    }
   }
 
   createdCallback() {
@@ -29,7 +47,7 @@ class CommentBox extends ElementBase.compose() {
     }
 
     this.store = createStore(this.reducer);
-    this.state = defaultState;
+    this.state = CommentBox.defaultState.deepCopy();
     this.tree = this.render(this.state);
     this.rootNode = create(this.tree);
     this.newTree = {};
@@ -38,6 +56,23 @@ class CommentBox extends ElementBase.compose() {
     this.store.subscribe(this.storeListener.bind(this));
 
     this.appendChild(this.rootNode);
+    this.initializeWithMockData();
+
+    // Set up event listener on CommentForm's onCommentSubmit
+    document.addEventListener('onCommentFormSubmit', this.handleCommentFormSubmit.bind(this), false);
+  }
+
+  initializeWithMockData() {
+    const mockDownloadedData = [
+      {author: 'Rob Bearman', commentText: 'Hey, Jan, make me a sandwich'},
+      {author: 'Jan Miksovsky', commentText: 'Ok, Rob, you are now a sandwich'}
+    ];
+
+    const action = {
+      type: 'ADD_COMMENTS',
+      comments: mockDownloadedData
+    };
+    this.store.dispatch(action);
   }
 
   storeListener() {
@@ -47,17 +82,24 @@ class CommentBox extends ElementBase.compose() {
     this.tree = this.newTree;
   }
 
-  render(state = defaultState) {
-    /* jshint ignore:start */
-    const mockDownloadedData = [
-      {id: 0, author: 'Rob Bearman', text: 'This is Rob\'s comment'},
-      {id: 1, author: 'Jan Miksovsky', text: 'This is Jan\'s comment'}
-    ];
+  handleCommentFormSubmit(e) {
+    if (e.detail == null || e.detail === undefined) {
+      return;
+    }
 
+    const action = {
+      type: 'ADD_COMMENTS',
+      comments: [e.detail]
+    };
+    this.store.dispatch(action);
+  }
+
+  render(state = CommentBox.defaultState.deepCopy()) {
+    /* jshint ignore:start */
     return (
       <div id="commentBox">
         <h1>Comments</h1>
-        <rwc-comment-list attributes={{"comment-data": JSON.stringify(mockDownloadedData)}}></rwc-comment-list>
+        <rwc-comment-list attributes={{"comment-data": JSON.stringify(state.commentList)}}></rwc-comment-list>
         <rwc-comment-form></rwc-comment-form>
       </div>
     );

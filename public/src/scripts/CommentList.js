@@ -7,23 +7,32 @@ import {h} from 'virtual-dom';
 /* jshint ignore:end */
 import ElementBase from 'basic-element-base/src/ElementBase';
 
-const defaultState = {
-  commentList: []
-};
-
 class CommentList extends ElementBase.compose() {
+
+  static get defaultState() {
+    return {
+      commentList: [],
+      deepCopy() {
+        let copy = Object.assign({}, this);
+        copy.commentList = this.commentList.slice();
+        return copy;
+      }
+    };
+  }
 
   reducer(state, action) {
     if (action == null || action.type == null) {
       return state;
     }
     if (state == null) {
-      state = defaultState;
+      state = CommentList.defaultState.deepCopy();
     }
 
     switch (action.type) {
-      case 'ADD_COMMENTS':
-        let newState = Object.assign({}, state);
+      case 'ADD_COMMENTS_FROM_ATTRIBUTES':
+        // Because comment data originates in attributes, we start with
+        // the default state each time.
+        let newState = CommentList.defaultState.deepCopy();
         for (let i = 0; i < action.comments.length; i++) {
           newState.commentList.push(action.comments[i]);
         }
@@ -40,7 +49,7 @@ class CommentList extends ElementBase.compose() {
     }
 
     this.store = createStore(this.reducer);
-    this.state = defaultState;
+    this.state = CommentList.defaultState.deepCopy();
     this.tree = this.render(this.state);
     this.rootNode = create(this.tree);
     this.newTree = {};
@@ -61,7 +70,7 @@ class CommentList extends ElementBase.compose() {
   set commentData(json) {
     let arrayComments = JSON.parse(json);
     const action = {
-      type: 'ADD_COMMENTS',
+      type: 'ADD_COMMENTS_FROM_ATTRIBUTES',
       comments: arrayComments
     };
     this.store.dispatch(action);
@@ -70,12 +79,12 @@ class CommentList extends ElementBase.compose() {
     return this.store.getState().commentList;
   }
 
-  render(state = defaultState) {
+  render(state = CommentList.defaultState.deepCopy()) {
     /* jshint ignore:start */
     let commentNodes = state.commentList.map((comment) => {
       return (
         <rwc-comment attributes={{author: comment.author, key: comment.key}}>
-          {comment.text}
+          {comment.commentText}
         </rwc-comment>
       );
     });
