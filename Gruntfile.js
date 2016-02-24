@@ -20,10 +20,10 @@ module.exports = function(grunt) {
         }
       },
       buildFiles: {
-        files: {[`dist/es5scripts.js`]: `src/scripts/**/*.js`}
+        files: {[`dist/es5scripts.js`]: 'src/scripts/**/*.js'}
       },
       watch: {
-        files: {[`dist/es5scripts.js`]: `src/scripts/**/*.js`},
+        files: {[`dist/es5scripts.js`]: 'src/scripts/**/*.js'},
         options: {
           keepAlive: true,
           watch: true
@@ -45,7 +45,7 @@ module.exports = function(grunt) {
     uglify: {
       production: {
         files: {
-          [`dist/es5scripts.js`]: [`dist/es5scripts.js`]
+          [`dist/es5scripts.js`]: ['dist/es5scripts.js']
         }
       }
     }
