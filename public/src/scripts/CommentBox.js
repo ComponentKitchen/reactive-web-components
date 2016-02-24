@@ -7,7 +7,7 @@ import {h} from 'virtual-dom';
 /* jshint ignore:end */
 import ElementBase from 'basic-element-base/src/ElementBase';
 
-class CommentBox extends ElementBase.compose() {
+class CommentBox extends ElementBase {
 
   static get defaultState() {
     return {
