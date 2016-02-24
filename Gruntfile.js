@@ -1,6 +1,6 @@
 'use strict';
 
-let uglifiedSrc = `public/src/dist/es5scripts.js`;
+let uglifiedSrc = `src/dist/es5scripts.js`;
 let uglifiedDest = uglifiedSrc;
 
 module.exports = function(grunt) {
@@ -25,10 +25,10 @@ module.exports = function(grunt) {
         }
       },
       buildFiles: {
-        files: {[`public/src/dist/es5scripts.js`]: `public/src/scripts/**/*.js`}
+        files: {[`src/dist/es5scripts.js`]: `src/scripts/**/*.js`}
       },
       watch: {
-        files: {[`public/src/dist/es5scripts.js`]: `public/src/scripts/**/*.js`},
+        files: {[`src/dist/es5scripts.js`]: `src/scripts/**/*.js`},
         options: {
           keepAlive: true,
           watch: true
@@ -37,11 +37,11 @@ module.exports = function(grunt) {
     },
 
     clean: {
-      public: ['public/src/dist']
+      dist: ['src/dist']
     },
 
     jshint: {
-      client: ['public/src/scripts/**/*.js'],
+      client: ['src/scripts/**/*.js'],
       options: {
         jshintrc: true
       }
@@ -54,7 +54,6 @@ module.exports = function(grunt) {
         }
       }
     }
-
   });
 
   grunt.registerTask('build', ['clean', 'jshint:client', 'browserify:buildFiles', 'uglify:production']);
