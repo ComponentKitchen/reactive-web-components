@@ -1,17 +1,12 @@
 'use strict';
 
-let uglifiedSrc = `src/dist/es5scripts.js`;
-let uglifiedDest = uglifiedSrc;
-
 module.exports = function(grunt) {
 
   grunt.loadNpmTasks('grunt-browserify');
   grunt.loadNpmTasks('grunt-contrib-clean');
-  grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-watch');
-  grunt.loadNpmTasks('grunt-simple-mocha');
 
   // Project configuration.
   grunt.initConfig({
@@ -50,7 +45,7 @@ module.exports = function(grunt) {
     uglify: {
       production: {
         files: {
-          [uglifiedDest]: [uglifiedSrc]
+          [`src/dist/es5scripts.js`]: [`src/dist/es5scripts.js`]
         }
       }
     }
