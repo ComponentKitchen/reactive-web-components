@@ -16,7 +16,7 @@ class Comment extends ElementBase {
     };
   }
 
-  reducer(state, action) {
+  static reducer(state, action) {
     if (action == null || action.type == null) {
       return state;
     }
@@ -40,7 +40,7 @@ class Comment extends ElementBase {
       super.createdCallback();
     }
 
-    this.store = createStore(this.reducer);
+    this.store = createStore(Comment.reducer);
     this.state = Object.assign({}, Comment.defaultState);
     this.tree = this.render(this.state);
     this.rootNode = create(this.tree);
@@ -120,7 +120,7 @@ class Comment extends ElementBase {
     return this.store.getState().comment;
   }
 
-  render(state = Object.assign({}, Comment.defaultState)) {
+  render(state) {
     // Render the local dom for the component
     /* jshint ignore:start */
     return (

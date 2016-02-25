@@ -16,7 +16,7 @@ class CommentForm extends ElementBase {
     };
   }
 
-  reducer(state, action) {
+  static reducer(state, action) {
     if (action == null || action.type == null) {
       return state;
     }
@@ -44,7 +44,7 @@ class CommentForm extends ElementBase {
       super.createdCallback();
     }
 
-    this.store = createStore(this.reducer);
+    this.store = createStore(CommentForm.reducer);
     this.state = Object.assign({}, CommentForm.defaultState);
     this.tree = this.render(this.state);
     this.rootNode = create(this.tree);
@@ -112,10 +112,10 @@ class CommentForm extends ElementBase {
     this.clearForm();
   }
 
-  render(state = Object.assign({}, CommentForm.defaultState)) {
+  render(state) {
     /* jshint ignore:start */
     return (
-      <form className="commentForm" onsubmit={this.handleSubmit.bind(this)}>
+      <form onsubmit={this.handleSubmit.bind(this)}>
         <input
           type="text"
           placeholder="Your name"

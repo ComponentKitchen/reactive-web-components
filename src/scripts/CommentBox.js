@@ -20,7 +20,7 @@ class CommentBox extends ElementBase {
     };
   }
 
-  reducer(state, action) {
+  static reducer(state, action) {
     if (action == null || action.type == null) {
       return state;
     }
@@ -46,7 +46,7 @@ class CommentBox extends ElementBase {
       super.createdCallback();
     }
 
-    this.store = createStore(this.reducer);
+    this.store = createStore(CommentBox.reducer);
     this.state = CommentBox.defaultState.deepCopy();
     this.tree = this.render(this.state);
     this.rootNode = create(this.tree);
@@ -94,7 +94,7 @@ class CommentBox extends ElementBase {
     this.store.dispatch(action);
   }
 
-  render(state = CommentBox.defaultState.deepCopy()) {
+  render(state) {
     /* jshint ignore:start */
     return (
       <div id="commentBox">

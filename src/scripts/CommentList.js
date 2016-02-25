@@ -20,7 +20,7 @@ class CommentList extends ElementBase {
     };
   }
 
-  reducer(state, action) {
+  static reducer(state, action) {
     if (action == null || action.type == null) {
       return state;
     }
@@ -48,7 +48,7 @@ class CommentList extends ElementBase {
       super.createdCallback();
     }
 
-    this.store = createStore(this.reducer);
+    this.store = createStore(CommentList.reducer);
     this.state = CommentList.defaultState.deepCopy();
     this.tree = this.render(this.state);
     this.rootNode = create(this.tree);
@@ -79,7 +79,7 @@ class CommentList extends ElementBase {
     return this.store.getState().commentList;
   }
 
-  render(state = CommentList.defaultState.deepCopy()) {
+  render(state) {
     /* jshint ignore:start */
     let commentNodes = state.commentList.map((comment) => {
       return (
