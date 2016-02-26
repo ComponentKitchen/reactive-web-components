@@ -40,12 +40,12 @@ class Comment extends ElementBase {
       super.createdCallback();
     }
 
+    // Initialize the component state and its Redux store.
+    // Build the initial DOM root node and prepare for future virtual-dom patches.
     this.store = createStore(Comment.reducer);
     this.state = Object.assign({}, Comment.defaultState);
     this.tree = this.render(this.state);
     this.rootNode = create(this.tree);
-    this.newTree = {};
-    this.patches = {};
 
     //
     // At the time the Comment element is created, no children have yet been created.
@@ -55,8 +55,7 @@ class Comment extends ElementBase {
     //
     this.observer = new MutationObserver((mutations) => {
       mutations.forEach((mutation) => {
-        // Watch for the addition of any children NOT including the div#comment local dom element.
-        // That is, watch for the addition of light dom elements.
+        // Watch for the addition of children nodes to <rwc-comment>, ignoring the component's initial local DOM.
         if (mutation.type == 'childList' &&
           mutation.addedNodes.length > 0 &&
           mutation.addedNodes[0].id !== 'comment') {
@@ -64,8 +63,8 @@ class Comment extends ElementBase {
           let node = mutation.addedNodes[0];
           let commentText = node.textContent;
 
-          // Remove the added nodes now that we've captured the comment. Everything else
-          // is considered a no-op.
+          // Remove the added nodes now that we've captured the comment.
+          // Note that we can't use map() here as NodeList is not an array.
           let nodeList = mutation.addedNodes;
           for (let i = 0; i < nodeList.length; i++) {
             this.removeChild(nodeList[i]);
@@ -87,10 +86,10 @@ class Comment extends ElementBase {
   }
 
   storeListener() {
-    this.newTree = this.render(this.store.getState());
-    this.patches = diff(this.tree, this.newTree);
-    this.rootNode = patch(this.rootNode, this.patches);
-    this.tree = this.newTree;
+    let newTree = this.render(this.store.getState());
+    let patches = diff(this.tree, newTree);
+    this.rootNode = patch(this.rootNode, patches);
+    this.tree = newTree;
   }
 
   //
@@ -99,22 +98,20 @@ class Comment extends ElementBase {
   // Redux store.
   //
   set author(author) {
-    const action = {
+    this.store.dispatch({
       type: 'SET_AUTHOR',
       author: author
-    };
-    this.store.dispatch(action);
+    });
   }
   get author() {
     return this.store.getState().author;
   }
 
   set comment(commentText) {
-    const action = {
+    this.store.dispatch({
       type: 'SET_COMMENT',
       comment: commentText
-    };
-    this.store.dispatch(action);
+    });
   }
   get comment() {
     return this.store.getState().comment;

@@ -44,12 +44,12 @@ class CommentForm extends ElementBase {
       super.createdCallback();
     }
 
+    // Initialize the component state and its Redux store.
+    // Build the initial DOM root node and prepare for future virtual-dom patches.
     this.store = createStore(CommentForm.reducer);
     this.state = Object.assign({}, CommentForm.defaultState);
     this.tree = this.render(this.state);
     this.rootNode = create(this.tree);
-    this.newTree = {};
-    this.patches = {};
 
     this.store.subscribe(this.storeListener.bind(this));
 
@@ -57,46 +57,45 @@ class CommentForm extends ElementBase {
   }
 
   storeListener() {
-    this.newTree = this.render(this.store.getState());
-    this.patches = diff(this.tree, this.newTree);
-    this.rootNode = patch(this.rootNode, this.patches);
-    this.tree = this.newTree;
+    let newTree = this.render(this.store.getState());
+    let patches = diff(this.tree, newTree);
+    this.rootNode = patch(this.rootNode, patches);
+    this.tree = newTree;
   }
 
   set author(val) {
-    const action = {
+    this.store.dispatch({
       type: 'SET_AUTHOR',
       author: val.trim()
-    };
-    this.store.dispatch(action);
+    });
   }
   get author() {
     return this.store.getState().author;
   }
 
   set commentText(val) {
-    const action = {
+    this.store.dispatch({
       type: 'SET_COMMENTTEXT',
       commentText: val.trim()
-    };
-    this.store.dispatch(action);
+    });
   }
   get commentText() {
     return this.store.getState().commentText;
   }
 
   clearForm() {
-    const action = {
+    this.store.dispatch({
       type: 'CLEAR_FORM'
-    };
-    this.store.dispatch(action);
+    });
   }
 
   handleAuthorChange(e) {
+    // Trigger the SET_AUTHOR store dispatch
     this.author = e.target.value;
   }
 
   handleCommentTextChange(e) {
+    // Triggger the SET_COMMENTTEXT store dispatch
     this.commentText = e.target.value;
   }
 
@@ -106,7 +105,9 @@ class CommentForm extends ElementBase {
       return;
     }
 
-    let event = new CustomEvent('onCommentFormSubmit', {detail: {author: this.author, commentText: this.commentText}});
+    // Fire a custom event containing author/commentText data for listeners looking for a
+    // newly added comment. Clear the form.
+    let event = new CustomEvent('onCommentAdded', {detail: {author: this.author, commentText: this.commentText}});
     document.dispatchEvent(event);
 
     this.clearForm();

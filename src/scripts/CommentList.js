@@ -30,12 +30,13 @@ class CommentList extends ElementBase {
 
     switch (action.type) {
       case 'ADD_COMMENTS_FROM_ATTRIBUTES':
-        // Because comment data originates in attributes, we start with
-        // the default state each time.
+        // We build the list of comments from the attributes that hosting code set on this component.
+        // When we get an attribute change notification, we can throw out the previous state and build
+        // new state entirely from the component's attributes.
         let newState = CommentList.defaultState.deepCopy();
-        for (let i = 0; i < action.comments.length; i++) {
-          newState.commentList.push(action.comments[i]);
-        }
+        action.comments.map((comment) => {
+          newState.commentList.push(comment);
+        });
         return newState;
 
       default:
@@ -48,12 +49,12 @@ class CommentList extends ElementBase {
       super.createdCallback();
     }
 
+    // Initialize the component state and its Redux store.
+    // Build the initial DOM root node and prepare for future virtual-dom patches.
     this.store = createStore(CommentList.reducer);
     this.state = CommentList.defaultState.deepCopy();
     this.tree = this.render(this.state);
     this.rootNode = create(this.tree);
-    this.newTree = {};
-    this.patches = {};
 
     this.store.subscribe(this.storeListener.bind(this));
 
@@ -61,19 +62,18 @@ class CommentList extends ElementBase {
   }
 
   storeListener() {
-    this.newTree = this.render(this.store.getState());
-    this.patches = diff(this.tree, this.newTree);
-    this.rootNode = patch(this.rootNode, this.patches);
-    this.tree = this.newTree;
+    let newTree = this.render(this.store.getState());
+    let patches = diff(this.tree, newTree);
+    this.rootNode = patch(this.rootNode, patches);
+    this.tree = newTree;
   }
 
   set commentData(json) {
     let arrayComments = JSON.parse(json);
-    const action = {
+    this.store.dispatch({
       type: 'ADD_COMMENTS_FROM_ATTRIBUTES',
       comments: arrayComments
-    };
-    this.store.dispatch(action);
+    });
   }
   get commentData() {
     return this.store.getState().commentList;

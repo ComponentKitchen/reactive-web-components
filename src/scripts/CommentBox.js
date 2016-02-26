@@ -31,9 +31,9 @@ class CommentBox extends ElementBase {
     switch (action.type) {
       case 'ADD_COMMENTS':
         let newState = state.deepCopy();
-        for (let i = 0; i < action.comments.length; i++) {
-          newState.commentList.push(action.comments[i]);
-        }
+        action.comments.map((comment) => {
+          newState.commentList.push(comment);
+        });
         return newState;
 
       default:
@@ -46,12 +46,12 @@ class CommentBox extends ElementBase {
       super.createdCallback();
     }
 
+    // Initialize the component state and its Redux store.
+    // Build the initial DOM root node and prepare for future virtual-dom patches.
     this.store = createStore(CommentBox.reducer);
     this.state = CommentBox.defaultState.deepCopy();
     this.tree = this.render(this.state);
     this.rootNode = create(this.tree);
-    this.newTree = {};
-    this.patches = {};
 
     this.store.subscribe(this.storeListener.bind(this));
 
@@ -59,7 +59,7 @@ class CommentBox extends ElementBase {
     this.initializeWithMockData();
 
     // Set up event listener on CommentForm's onCommentSubmit
-    document.addEventListener('onCommentFormSubmit', this.handleCommentFormSubmit.bind(this), false);
+    document.addEventListener('onCommentAdded', this.handleCommentAdded.bind(this), false);
   }
 
   initializeWithMockData() {
@@ -68,30 +68,28 @@ class CommentBox extends ElementBase {
       {author: 'Jan Miksovsky', commentText: 'Ok, Rob, you are now a sandwich'}
     ];
 
-    const action = {
+    this.store.dispatch({
       type: 'ADD_COMMENTS',
       comments: mockDownloadedData
-    };
-    this.store.dispatch(action);
+    });
   }
 
   storeListener() {
-    this.newTree = this.render(this.store.getState());
-    this.patches = diff(this.tree, this.newTree);
-    this.rootNode = patch(this.rootNode, this.patches);
-    this.tree = this.newTree;
+    let newTree = this.render(this.store.getState());
+    let patches = diff(this.tree, newTree);
+    this.rootNode = patch(this.rootNode, patches);
+    this.tree = newTree;
   }
 
-  handleCommentFormSubmit(e) {
+  handleCommentAdded(e) {
     if (e.detail == null || e.detail === undefined) {
       return;
     }
 
-    const action = {
+    this.store.dispatch({
       type: 'ADD_COMMENTS',
       comments: [e.detail]
-    };
-    this.store.dispatch(action);
+    });
   }
 
   render(state) {
