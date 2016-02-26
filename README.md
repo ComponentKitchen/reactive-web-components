@@ -1,14 +1,14 @@
 # Building Web Components using Functional Reactive Programming Techniques
 This project is inspired by [a React tutorial](https://facebook.github.io/react/docs/tutorial.html) that demonstrates
-how to use react to create a comment box. The tutorial guides you in building a small number of React components,
+how to use React to create a comment box. The tutorial guides you in building a small number of React components,
 including components that host other React components. Being purely React components, they can be used only
 within the context of a React application. Web components, on the other hand, may be used within any web application,
 regardless of the frameworks used.
 
 What this project demonstrates is that the same general component architecture can be used as the React tutorial
-in building universally shareable web components while still using the functional reactive programming techniques
-of React. Rather than employing React, we use instead the [virtual-dom](https://github.com/Matt-Esch/virtual-dom)
-and [Redux](https://github.com/reactjs/redux) modules.
+in building universally shareable web components while still using functional reactive programming techniques
+individually within the construction of each web component. Rather than employing React, we use instead 
+the [virtual-dom](https://github.com/Matt-Esch/virtual-dom) and [Redux](https://github.com/reactjs/redux) modules.
 
 ## Getting Started
 
