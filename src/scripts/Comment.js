@@ -36,10 +36,6 @@ class Comment extends ElementBase {
   }
 
   createdCallback() {
-    if (super.createdCallback) {
-      super.createdCallback();
-    }
-
     // Initialize the component state and its Redux store.
     // Build the initial DOM root node and prepare for future virtual-dom patches.
     this.store = createStore(Comment.reducer);
@@ -83,6 +79,36 @@ class Comment extends ElementBase {
 
     // Attach the new local dom to the <rwc-comment> element
     this.appendChild(this.rootNode);
+
+    //
+    // The behavior of polyfill browsers differs from native (Chrome) in that at this
+    // point, the TEXT childNode will exist under <rwc-comment>. Here, we take the
+    // same action as we would in our MutationObserver above.
+    //
+    if (this.childNodes) {
+      let arrayOfNodesToRemove = [];
+
+      for (let i = 0; i < this.childNodes.length; i++) {
+        let node = this.childNodes[i];
+
+        if (node.id !== 'comment') {
+          let commentText = node.textContent;
+          // Collect the child nodes we need to remove
+          arrayOfNodesToRemove.push(node);
+          // Last one found wins - though typically we'd have only one child node
+          this.comment = commentText;
+        }
+      }
+
+      // Now blow away the child nodes from the DOM
+      arrayOfNodesToRemove.map((node) => {
+        this.removeChild(node);
+      });
+    }
+
+    if (super.createdCallback) {
+      super.createdCallback();
+    }
   }
 
   storeListener() {

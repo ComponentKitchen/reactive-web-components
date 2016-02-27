@@ -45,10 +45,6 @@ class CommentList extends ElementBase {
   }
 
   createdCallback() {
-    if (super.createdCallback) {
-      super.createdCallback();
-    }
-
     // Initialize the component state and its Redux store.
     // Build the initial DOM root node and prepare for future virtual-dom patches.
     this.store = createStore(CommentList.reducer);
@@ -59,6 +55,10 @@ class CommentList extends ElementBase {
     this.store.subscribe(this.storeListener.bind(this));
 
     this.appendChild(this.rootNode);
+
+    if (super.createdCallback) {
+      super.createdCallback();
+    }
   }
 
   storeListener() {
