@@ -96,7 +96,7 @@ class CommentBox extends ElementBase {
       <div id="commentBox">
         <h1>Comments</h1>
         <rwc-comment-list attributes={{"comment-data": JSON.stringify(state.commentList)}}></rwc-comment-list>
-        <rwc-comment-form style="display: block; margin-top: 40px;"></rwc-comment-form>
+        <rwc-comment-form attributes={{style: "display: block; margin-top: 40px;"}}></rwc-comment-form>
       </div>
     );
     /* jshint ignore:end */
