@@ -2,9 +2,7 @@ import {createStore} from 'redux';
 import {diff} from 'virtual-dom';
 import {patch} from 'virtual-dom';
 import {create} from 'virtual-dom';
-/* jshint ignore:start */
-import {h} from 'virtual-dom';
-/* jshint ignore:end */
+import {h} from 'virtual-dom'; // jshint ignore:line
 import ElementBase from 'basic-element-base/src/ElementBase';
 
 class CommentForm extends ElementBase {
@@ -21,7 +19,7 @@ class CommentForm extends ElementBase {
       return state;
     }
     if (state == null) {
-      state = Object.assign({}, CommentForm.defaultState);
+      state =CommentForm.defaultState;
     }
 
     switch (action.type) {
@@ -43,7 +41,7 @@ class CommentForm extends ElementBase {
     // Initialize the component state and its Redux store.
     // Build the initial DOM root node and prepare for future virtual-dom patches.
     this.store = createStore(CommentForm.reducer);
-    this.state = Object.assign({}, CommentForm.defaultState);
+    this.state = CommentForm.defaultState;
     this.tree = this.render(this.state);
     this.rootNode = create(this.tree);
 
@@ -107,10 +105,11 @@ class CommentForm extends ElementBase {
 
     // Fire a custom event containing author/commentText data for listeners looking for a
     // newly added comment. Clear the form.
-    let event = new CustomEvent('onCommentAdded', {detail: {author: this.author, commentText: this.commentText}});
+    let event = new CustomEvent('comment-added', {detail: {author: this.author, commentText: this.commentText}});
     document.dispatchEvent(event);
 
     this.clearForm();
+    document.getElementById('authorInput').focus();
   }
 
   render(state) {
@@ -118,10 +117,12 @@ class CommentForm extends ElementBase {
     return (
       <form onsubmit={this.handleSubmit.bind(this)}>
         <input
+          id="authorInput"
           type="text"
           placeholder="Your name"
           value={state.author}
           onchange={this.handleAuthorChange.bind(this)}
+          autofocus
         />
         <input
           type="text"

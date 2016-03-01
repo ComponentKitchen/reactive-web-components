@@ -2,9 +2,7 @@ import {createStore} from 'redux';
 import {diff} from 'virtual-dom';
 import {patch} from 'virtual-dom';
 import {create} from 'virtual-dom';
-/* jshint ignore:start */
-import {h} from 'virtual-dom';
-/* jshint ignore:end */
+import {h} from 'virtual-dom'; // jshint ignore:line
 import ElementBase from 'basic-element-base/src/ElementBase';
 
 class Comment extends ElementBase {
@@ -21,7 +19,7 @@ class Comment extends ElementBase {
       return state;
     }
     if (state == null) {
-      state = Object.assign({}, Comment.defaultState);
+      state = Comment.defaultState;
     }
     switch (action.type) {
       case 'SET_AUTHOR':
@@ -39,7 +37,7 @@ class Comment extends ElementBase {
     // Initialize the component state and its Redux store.
     // Build the initial DOM root node and prepare for future virtual-dom patches.
     this.store = createStore(Comment.reducer);
-    this.state = Object.assign({}, Comment.defaultState);
+    this.state = Comment.defaultState;
     this.tree = this.render(this.state);
     this.rootNode = create(this.tree);
 
@@ -52,19 +50,17 @@ class Comment extends ElementBase {
     this.observer = new MutationObserver((mutations) => {
       mutations.forEach((mutation) => {
         // Watch for the addition of children nodes to <rwc-comment>, ignoring the component's initial local DOM.
-        if (mutation.type == 'childList' &&
-          mutation.addedNodes.length > 0 &&
+        if (mutation.addedNodes.length > 0 &&
           mutation.addedNodes[0].id !== 'comment') {
 
-          let node = mutation.addedNodes[0];
-          let commentText = node.textContent;
+          let commentText = mutation.addedNodes[0].textContent;
 
           // Remove the added nodes now that we've captured the comment.
-          // Note that we can't use map() here as NodeList is not an array.
-          let nodeList = mutation.addedNodes;
-          for (let i = 0; i < nodeList.length; i++) {
-            this.removeChild(nodeList[i]);
-          }
+          let nodeList = [].slice.call(mutation.addedNodes);
+          nodeList.forEach((node) => {
+            this.removeChild(node);
+          });
+
 
           this.comment = commentText;
         }
@@ -101,7 +97,7 @@ class Comment extends ElementBase {
       }
 
       // Now blow away the child nodes from the DOM
-      arrayOfNodesToRemove.map((node) => {
+      arrayOfNodesToRemove.forEach((node) => {
         this.removeChild(node);
       });
     }

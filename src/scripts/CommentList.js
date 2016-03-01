@@ -2,9 +2,7 @@ import {createStore} from 'redux';
 import {diff} from 'virtual-dom';
 import {patch} from 'virtual-dom';
 import {create} from 'virtual-dom';
-/* jshint ignore:start */
-import {h} from 'virtual-dom';
-/* jshint ignore:end */
+import {h} from 'virtual-dom'; // jshint ignore:line
 import ElementBase from 'basic-element-base/src/ElementBase';
 
 class CommentList extends ElementBase {
@@ -25,7 +23,7 @@ class CommentList extends ElementBase {
       return state;
     }
     if (state == null) {
-      state = CommentList.defaultState.deepCopy();
+      state = CommentList.defaultState;
     }
 
     switch (action.type) {
@@ -48,7 +46,7 @@ class CommentList extends ElementBase {
     // Initialize the component state and its Redux store.
     // Build the initial DOM root node and prepare for future virtual-dom patches.
     this.store = createStore(CommentList.reducer);
-    this.state = CommentList.defaultState.deepCopy();
+    this.state = CommentList.defaultState;
     this.tree = this.render(this.state);
     this.rootNode = create(this.tree);
 

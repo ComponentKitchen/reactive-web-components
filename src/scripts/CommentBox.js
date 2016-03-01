@@ -2,9 +2,7 @@ import {createStore} from 'redux';
 import {diff} from 'virtual-dom';
 import {patch} from 'virtual-dom';
 import {create} from 'virtual-dom';
-/* jshint ignore:start */
-import {h} from 'virtual-dom';
-/* jshint ignore:end */
+import {h} from 'virtual-dom'; // jshint ignore:line
 import ElementBase from 'basic-element-base/src/ElementBase';
 
 class CommentBox extends ElementBase {
@@ -25,7 +23,7 @@ class CommentBox extends ElementBase {
       return state;
     }
     if (state == null) {
-      state = CommentBox.defaultState.deepCopy();
+      state = CommentBox.defaultState;
     }
 
     switch (action.type) {
@@ -45,7 +43,7 @@ class CommentBox extends ElementBase {
     // Initialize the component state and its Redux store.
     // Build the initial DOM root node and prepare for future virtual-dom patches.
     this.store = createStore(CommentBox.reducer);
-    this.state = CommentBox.defaultState.deepCopy();
+    this.state = CommentBox.defaultState;
     this.tree = this.render(this.state);
     this.rootNode = create(this.tree);
 
@@ -55,7 +53,7 @@ class CommentBox extends ElementBase {
     this.initializeWithMockData();
 
     // Set up event listener on CommentForm's onCommentSubmit
-    document.addEventListener('onCommentAdded', this.handleCommentAdded.bind(this), false);
+    document.addEventListener('comment-added', this.handleCommentAdded.bind(this), false);
 
     if (super.createdCallback) {
       super.createdCallback();
@@ -98,7 +96,7 @@ class CommentBox extends ElementBase {
       <div id="commentBox">
         <h1>Comments</h1>
         <rwc-comment-list attributes={{"comment-data": JSON.stringify(state.commentList)}}></rwc-comment-list>
-        <rwc-comment-form></rwc-comment-form>
+        <rwc-comment-form style="display: block; margin-top: 40px;"></rwc-comment-form>
       </div>
     );
     /* jshint ignore:end */
