@@ -43,8 +43,7 @@ class CommentBox extends ElementBase {
     // Initialize the component state and its Redux store.
     // Build the initial DOM root node and prepare for future virtual-dom patches.
     this.store = createStore(CommentBox.reducer);
-    this.state = CommentBox.defaultState;
-    this.tree = this.render(this.state);
+    this.tree = this.render(CommentBox.defaultState);
     this.rootNode = create(this.tree);
 
     this.store.subscribe(this.storeListener.bind(this));

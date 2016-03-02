@@ -37,8 +37,7 @@ class Comment extends ElementBase {
     // Initialize the component state and its Redux store.
     // Build the initial DOM root node and prepare for future virtual-dom patches.
     this.store = createStore(Comment.reducer);
-    this.state = Comment.defaultState;
-    this.tree = this.render(this.state);
+    this.tree = this.render(Comment.defaultState);
     this.rootNode = create(this.tree);
 
     //

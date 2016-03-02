@@ -42,7 +42,7 @@ class CommentForm extends ElementBase {
     // Build the initial DOM root node and prepare for future virtual-dom patches.
     this.store = createStore(CommentForm.reducer);
     this.state = CommentForm.defaultState;
-    this.tree = this.render(this.state);
+    this.tree = this.render(CommentForm.defaultState);
     this.rootNode = create(this.tree);
 
     this.store.subscribe(this.storeListener.bind(this));
