@@ -32,7 +32,7 @@ class CommentList extends ElementBase {
         // When we get an attribute change notification, we can throw out the previous state and build
         // new state entirely from the component's attributes.
         let newState = CommentList.defaultState.deepCopy();
-        action.comments.map((comment) => {
+        action.comments.forEach((comment) => {
           newState.commentList.push(comment);
         });
         return newState;
