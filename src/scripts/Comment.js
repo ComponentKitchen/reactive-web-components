@@ -37,8 +37,10 @@ class Comment extends ElementBase {
     // Initialize the component state and its Redux store.
     // Build the initial DOM root node and prepare for future virtual-dom patches.
     this.store = createStore(Comment.reducer);
+    this.store.subscribe(this.storeListener.bind(this));
     this.tree = this.render(Comment.defaultState);
     this.rootNode = create(this.tree);
+    this.appendChild(this.rootNode);
 
     //
     // At the time the Comment element is created, no children have yet been created.
@@ -68,12 +70,6 @@ class Comment extends ElementBase {
 
     // Activate the MutationObserver
     this.observer.observe(this, {childList: true});
-
-    // Subscribe to change notifications to the Redux store
-    this.store.subscribe(this.storeListener.bind(this));
-
-    // Attach the new local dom to the <rwc-comment> element
-    this.appendChild(this.rootNode);
 
     //
     // The behavior of polyfill browsers differs from native (Chrome) in that at this
