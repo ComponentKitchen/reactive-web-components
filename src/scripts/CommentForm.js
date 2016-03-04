@@ -24,7 +24,7 @@ class CommentForm extends ElementBase {
 
     switch (action.type) {
       case 'CLEAR_FORM':
-        return Object.assign({}, state, {author: '', commentText: ''});
+        return CommentForm.defaultState;
 
       case 'SET_AUTHOR':
         return Object.assign({}, state, {author: action.author});
