@@ -62,7 +62,6 @@ class Comment extends ElementBase {
             this.removeChild(node);
           });
 
-
           this.comment = commentText;
         }
       });
