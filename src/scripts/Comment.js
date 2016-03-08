@@ -5,6 +5,10 @@ import {create} from 'virtual-dom';
 import {h} from 'virtual-dom'; // jshint ignore:line
 import AttributeMarshalling from 'basic-component-mixins/src/AttributeMarshalling';
 
+// Feature detection for old Shadow DOM v0.
+// From ShadowTemplate.js
+const USING_SHADOW_DOM_V0 = (typeof HTMLElement.prototype.createShadowRoot !== 'undefined');
+
 class Comment extends AttributeMarshalling(HTMLElement) {
 
   static get defaultState() {
@@ -40,7 +44,11 @@ class Comment extends AttributeMarshalling(HTMLElement) {
     this.store.subscribe(this.storeListener.bind(this));
     this.tree = this.render(Comment.defaultState);
     this.rootNode = create(this.tree);
-    this.appendChild(this.rootNode);
+
+    let sRoot = USING_SHADOW_DOM_V0 ?
+      this.createShadowRoot() :
+      this.attachShadow({mode: 'open'});
+    sRoot.appendChild(this.rootNode);
 
     //
     // At the time the Comment element is created, no children have yet been created.
