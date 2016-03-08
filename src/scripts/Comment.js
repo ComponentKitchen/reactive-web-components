@@ -13,8 +13,7 @@ class Comment extends AttributeMarshalling(HTMLElement) {
 
   static get defaultState() {
     return {
-      author: '',
-      comment: ''
+      author: ''
     };
   }
 
@@ -28,9 +27,6 @@ class Comment extends AttributeMarshalling(HTMLElement) {
     switch (action.type) {
       case 'SET_AUTHOR':
         return Object.assign({}, state, {author: action.author});
-
-      case 'SET_COMMENT':
-        return Object.assign({}, state, {comment: action.comment});
 
       default:
         return state;
@@ -51,58 +47,13 @@ class Comment extends AttributeMarshalling(HTMLElement) {
     sRoot.appendChild(this.rootNode);
 
     //
-    // At the time the Comment element is created, no children have yet been created.
-    // Since the comment text is written to be a text child of <rwc-comment>, we need
-    // to watch for that child to be added at which time we'll capture it as the comment
-    // state value, then remove the child element from the DOM.
+    // Note that with support for shadow DOM, we can drop
+    // the MutationObserver code that translated a text element
+    // to comment text for the state object. We no longer
+    // track comment state, and instead render whatever
+    // light DOM is provided to the <content>/<slot>
+    // placeholder.
     //
-    this.observer = new MutationObserver((mutations) => {
-      mutations.forEach((mutation) => {
-        // Watch for the addition of children nodes to <rwc-comment>, ignoring the component's initial local DOM.
-        if (mutation.addedNodes.length > 0 &&
-          mutation.addedNodes[0].id !== 'comment') {
-
-          let commentText = mutation.addedNodes[0].textContent;
-
-          // Remove the added nodes now that we've captured the comment.
-          let nodeList = [].slice.call(mutation.addedNodes);
-          nodeList.forEach((node) => {
-            this.removeChild(node);
-          });
-
-          this.comment = commentText;
-        }
-      });
-    });
-
-    // Activate the MutationObserver
-    this.observer.observe(this, {childList: true});
-
-    //
-    // The behavior of polyfill browsers differs from native (Chrome) in that at this
-    // point, the TEXT childNode will exist under <rwc-comment>. Here, we take the
-    // same action as we would in our MutationObserver above.
-    //
-    if (this.childNodes) {
-      let arrayOfNodesToRemove = [];
-
-      for (let i = 0; i < this.childNodes.length; i++) {
-        let node = this.childNodes[i];
-
-        if (node.id !== 'comment') {
-          let commentText = node.textContent;
-          // Collect the child nodes we need to remove
-          arrayOfNodesToRemove.push(node);
-          // Last one found wins - though typically we'd have only one child node
-          this.comment = commentText;
-        }
-      }
-
-      // Now blow away the child nodes from the DOM
-      arrayOfNodesToRemove.forEach((node) => {
-        this.removeChild(node);
-      });
-    }
 
     if (super.createdCallback) {
       super.createdCallback();
@@ -131,16 +82,13 @@ class Comment extends AttributeMarshalling(HTMLElement) {
     return this.store.getState().author;
   }
 
-  set comment(commentText) {
-    this.store.dispatch({
-      type: 'SET_COMMENT',
-      comment: commentText
-    });
-  }
-  get comment() {
-    return this.store.getState().comment;
-  }
-
+  //
+  // With support for shadow DOM, the Comment component no longer
+  // needs to track the comment text as part of its state. Instead,
+  // the Comment component's host (in the rwc demo case, CommentList),
+  // can supply a light DOM tree that will display through the
+  // <content> element -- soon to be <slot>.
+  //
   render(state) {
     // Render the local dom for the component
     /* jshint ignore:start */
@@ -149,7 +97,7 @@ class Comment extends AttributeMarshalling(HTMLElement) {
         <h2 id="commentAuthor">
           {state.author}
         </h2>
-        {state.comment}
+        <content></content>
       </div>
     );
     /* jshint ignore:end */
