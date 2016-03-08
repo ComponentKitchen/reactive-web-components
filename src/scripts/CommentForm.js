@@ -3,9 +3,15 @@ import {diff} from 'virtual-dom';
 import {patch} from 'virtual-dom';
 import {create} from 'virtual-dom';
 import {h} from 'virtual-dom'; // jshint ignore:line
+import Composable from 'basic-component-mixins/src/Composable';
 import AttributeMarshalling from 'basic-component-mixins/src/AttributeMarshalling';
+import ShadowElementReferences from 'basic-component-mixins/src/ShadowElementReferences';
 
-class CommentForm extends AttributeMarshalling(HTMLElement) {
+// Feature detection for old Shadow DOM v0.
+// From ShadowTemplate.js
+const USING_SHADOW_DOM_V0 = (typeof HTMLElement.prototype.createShadowRoot !== 'undefined');
+
+class CommentForm extends Composable(HTMLElement).compose(AttributeMarshalling, ShadowElementReferences) {
 
   static get defaultState() {
     return {
@@ -44,7 +50,11 @@ class CommentForm extends AttributeMarshalling(HTMLElement) {
     this.store.subscribe(this.storeListener.bind(this));
     this.tree = this.render(CommentForm.defaultState);
     this.rootNode = create(this.tree);
-    this.appendChild(this.rootNode);
+
+    this.sRoot = USING_SHADOW_DOM_V0 ?
+      this.createShadowRoot() :
+      this.attachShadow({mode: 'open'});
+    this.sRoot.appendChild(this.rootNode);
 
     if (super.createdCallback) {
       super.createdCallback();
@@ -106,7 +116,8 @@ class CommentForm extends AttributeMarshalling(HTMLElement) {
     document.dispatchEvent(event);
 
     this.clearForm();
-    document.getElementById('authorInput').focus();
+    // Use the ShadowElementReference mixin to get a selector for the 'authorInput' shadow DOM element
+    this.$.authorInput.focus();
   }
 
   render(state) {
