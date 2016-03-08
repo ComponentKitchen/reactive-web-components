@@ -51,10 +51,10 @@ class CommentForm extends Composable(HTMLElement).compose(AttributeMarshalling, 
     this.tree = this.render(CommentForm.defaultState);
     this.rootNode = create(this.tree);
 
-    this.sRoot = USING_SHADOW_DOM_V0 ?
+    let sRoot = USING_SHADOW_DOM_V0 ?
       this.createShadowRoot() :
       this.attachShadow({mode: 'open'});
-    this.sRoot.appendChild(this.rootNode);
+    sRoot.appendChild(this.rootNode);
 
     if (super.createdCallback) {
       super.createdCallback();
