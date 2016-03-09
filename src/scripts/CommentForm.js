@@ -3,9 +3,9 @@ import {diff} from 'virtual-dom';
 import {patch} from 'virtual-dom';
 import {create} from 'virtual-dom';
 import {h} from 'virtual-dom'; // jshint ignore:line
-import ElementBase from 'basic-element-base/src/ElementBase';
+import AttributeMarshalling from 'basic-component-mixins/src/AttributeMarshalling';
 
-class CommentForm extends ElementBase {
+class CommentForm extends AttributeMarshalling(HTMLElement) {
 
   static get defaultState() {
     return {
