@@ -10,6 +10,8 @@ in building universally shareable web components while still using functional re
 individually within the construction of each web component. Rather than employing React, we use instead 
 the [virtual-dom](https://github.com/Matt-Esch/virtual-dom) and [Redux](https://github.com/reactjs/redux) modules.
 
+A live demo can be found [here](http://componentkitchen.github.io/reactive-web-components/).
+
 ## Getting Started
 
 * Clone this project
