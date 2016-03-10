@@ -82,16 +82,11 @@ class CommentList extends AttributeMarshalling(HTMLElement) {
     return this.store.getState().commentList;
   }
 
-  //
-  // Note: In using shadow DOM, we can now take advantage of a Comment component
-  // that can render light DOM. See the Comment component source for more details
-  // on how it changes from the local DOM version of rwc.
-  //
   render(state) {
     /* jshint ignore:start */
     let commentNodes = state.commentList.map((comment) => {
       return (
-        <rwc-comment attributes={{author: comment.author, key: comment.key}}>
+        <rwc-comment attributes={{author: comment.author}}>
           <div id="commentText">
             {comment.commentText}
           </div>
