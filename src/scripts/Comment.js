@@ -46,15 +46,6 @@ class Comment extends AttributeMarshalling(HTMLElement) {
       this.attachShadow({mode: 'open'});
     sRoot.appendChild(this.rootNode);
 
-    //
-    // Note that with support for shadow DOM, we can drop
-    // the MutationObserver code that translated a text element
-    // to comment text for the state object. We no longer
-    // track comment state, and instead render whatever
-    // light DOM is provided to the <content>/<slot>
-    // placeholder.
-    //
-
     if (super.createdCallback) {
       super.createdCallback();
     }
@@ -83,9 +74,7 @@ class Comment extends AttributeMarshalling(HTMLElement) {
   }
 
   //
-  // With support for shadow DOM, the Comment component no longer
-  // needs to track the comment text as part of its state. Instead,
-  // the Comment component's host (in the rwc demo case, CommentList),
+  // The Comment component's host (in the demo case, CommentList),
   // can supply a light DOM tree that will display through the
   // <content> element -- soon to be <slot>.
   //
