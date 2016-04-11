@@ -101,7 +101,7 @@ class CommentBox extends AttributeMarshalling(HTMLElement) {
     return (
       <div id="commentBox">
         <h1>Comments</h1>
-        <rwc-comment-list attributes={{"comment-data": JSON.stringify(state.commentList)}}></rwc-comment-list>
+        <rwc-comment-list commentData={state.commentList}></rwc-comment-list>
         <rwc-comment-form attributes={{style: "display: block; margin-top: 40px;"}}></rwc-comment-form>
       </div>
     );

@@ -31,11 +31,10 @@ class CommentList extends AttributeMarshalling(HTMLElement) {
     }
 
     switch (action.type) {
+      // Copy the previous state, and append the new comments
+      // to the end of the commentList array.
       case 'ADD_COMMENTS_FROM_ATTRIBUTES':
-        // We build the list of comments from the attributes that hosting code set on this component.
-        // When we get an attribute change notification, we can throw out the previous state and build
-        // new state entirely from the component's attributes.
-        let newState = CommentList.defaultState.deepCopy();
+        let newState = state.deepCopy();
         action.comments.forEach((comment) => {
           newState.commentList.push(comment);
         });
@@ -72,7 +71,13 @@ class CommentList extends AttributeMarshalling(HTMLElement) {
   }
 
   set commentData(json) {
-    let arrayComments = JSON.parse(json);
+    // virtual-dom sends us a patch json map, converted
+    // from the commentData array we send in the CommentBox render JSX.
+    // Here, we convert that map to an array for our dispatch call.
+    let arrayComments = [];
+    for (let key in json) {
+      arrayComments.push(json[key]);
+    }
     this.store.dispatch({
       type: 'ADD_COMMENTS_FROM_ATTRIBUTES',
       comments: arrayComments
@@ -86,7 +91,7 @@ class CommentList extends AttributeMarshalling(HTMLElement) {
     /* jshint ignore:start */
     let commentNodes = state.commentList.map((comment) => {
       return (
-        <rwc-comment attributes={{author: comment.author}}>
+        <rwc-comment author={comment.author}>
           <div id="commentText">
             {comment.commentText}
           </div>
